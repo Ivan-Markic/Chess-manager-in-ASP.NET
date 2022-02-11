@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ChessGameManager.ChessGame>
+
+@{
+    ViewBag.Title = "Chess games";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 ><strong>Chess games</strong></h2>
+
+<button class="btn btn-success" style="margin-bottom:20px">
+    <strong>@Html.ActionLink("Create Game", "Create")</strong>
+</button>
+<button class="btn btn-warning" style="margin-bottom:20px">
+    <strong>@Html.ActionLink("Players", "../Person/Index")</strong>
+</button>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDChessGame)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstPlayer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SecondPlayer)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.IDChessGame)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Location)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FirstPlayer.FirstName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SecondPlayer.FirstName)
+    </td>
+    <td>
+        <button class="btn btn-success">@Html.ActionLink("Edit", "Edit", new { id = item.IDChessGame })</button>
+        <button class="btn btn-info">@Html.ActionLink("Details", "Details", new { id = item.IDChessGame })</button>
+        <button class="btn btn-danger">@Html.ActionLink("Delete", "Delete", new { id = item.IDChessGame }) </button>
+    </td>
+</tr>
+}
+</table>

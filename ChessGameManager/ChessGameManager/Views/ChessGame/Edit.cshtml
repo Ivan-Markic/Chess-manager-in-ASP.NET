@@ -1,0 +1,94 @@
+﻿@model ChessGameManager.ChessGame
+
+@{
+    ViewBag.Title = "Edit";
+    var people1 = (ViewBag.People1 as IEnumerable<Person>).ToList();
+    var people2 = (ViewBag.People2 as IEnumerable<Person>).ToList();
+    var ddlOpcije1 = new SelectList(people1, dataValueField: "IDPerson", dataTextField: "FirstName");
+    var ddlOpcije2 = new SelectList(people2, dataValueField: "IDPerson", dataTextField: "FirstName");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm("Edit", "ChessGame", null, FormMethod.Post,
+    new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>ChessGame</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.IDChessGame, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.IDChessGame, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstPlayer, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("firstPlayerID", ddlOpcije1, htmlAttributes: new { @class = "ddl form-control" })
+
+            @Html.ValidationMessageFor(model => model.FirstPlayer, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SecondPlayer, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("secondPlayerID", ddlOpcije2, htmlAttributes: new { @class = "ddl form-control" })
+
+            @Html.ValidationMessageFor(model => model.SecondPlayer, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @foreach (var uploadedFile in Model.UploadedFiles)
+    {
+        <div class="form-group">
+            <span class="control-label col-md-2">
+                <strong>@uploadedFile.Name</strong><br />
+                @Ajax.ActionLink("Delete", "Delete", "File", new { id = uploadedFile.IDUploadedFille },
+               new AjaxOptions { HttpMethod = "Post" })
+            </span>
+            <div class="col-md-10">
+                <img src="~/File?id=@uploadedFile.IDUploadedFille" alt="picture" width="300" height="200" />
+            </div>
+        </div>
+    }
+
+    <div class="form-group">
+        @Html.Label("Picture", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="file" id="Picture" multiple accept="image/*" name="files" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-success" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    <button class="btn btn-warning">
+        @Html.ActionLink("Back to List", "Index")
+    </button>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
